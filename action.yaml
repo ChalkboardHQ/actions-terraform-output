@@ -1,0 +1,17 @@
+name: Terraform output
+description: Store terraform output to file
+inputs:
+#  json:
+#    description: json output flag
+#    required: false
+#    default: 'false'
+  path:
+    description: output file path
+    required: true
+    default: output.json
+outputs:
+  result:
+    description: 'Terraform output'
+runs:
+  using: 'node16'
+  main: 'dest/index.js'

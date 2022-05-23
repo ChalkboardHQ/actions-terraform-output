@@ -1,0 +1,38 @@
+{
+  "name": "terraform-output",
+  "version": "0.1.0",
+  "description": "Store terraform output to file",
+  "main": "dest/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "rm -rf dest && tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@tidepoollabs.com:ChalkboardHQ/actions-terraform-output.git"
+  },
+  "keywords": [
+    "terrafrom",
+    "json",
+    "github",
+    "actions"
+  ],
+  "author": "Artashes Yengibaryan",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^17.0.35",
+    "@typescript-eslint/eslint-plugin": "^5.25.0",
+    "@typescript-eslint/parser": "^5.25.0",
+    "eslint": "^8.16.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-plugin-import": "^2.26.0",
+    "ts-node": "^10.8.0",
+    "tsconfig-paths": "^4.0.0",
+    "typescript": "^4.6.4"
+  },
+  "dependencies": {
+    "@actions/core": "^1.8.2"
+  }
+}
