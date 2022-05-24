@@ -38,8 +38,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const child_process_1 = __nccwpck_require__(81);
+const fs_1 = __nccwpck_require__(147);
+const path_1 = __importDefault(__nccwpck_require__(17));
 const core = __importStar(__nccwpck_require__(186));
 let filePath = '';
 function getTerraformOutput() {
@@ -47,20 +52,25 @@ function getTerraformOutput() {
         return new Promise((resolve, reject) => {
             const command = (0, child_process_1.spawn)('terraform', [
                 'output',
-                '-json'
+                '-json',
             ]);
-            command.stdout.on('data', data => {
-                core.info(`stdout: ${data}`);
+            let result = {};
+            command.stdout.on('data', (data) => {
+                try {
+                    result = JSON.parse(data);
+                    return undefined;
+                }
+                catch (e) {
+                    return undefined;
+                }
             });
-            command.stderr.on('data', data => {
-                core.info(`stderr: ${data}`);
-            });
-            command.on('error', (error) => {
-                core.info(`error: ${error.message}`);
-            });
-            command.on('close', code => {
-                core.info(`child process exited with code ${code}`);
-                resolve({});
+            command.stderr.on('data', (data) => reject(new Error(data)));
+            command.on('error', (e) => reject(e));
+            command.on('close', (code) => {
+                if (code === 0) {
+                    return resolve(result);
+                }
+                return reject(new Error(`child process exited with code ${code}`));
             });
         });
     });
@@ -72,7 +82,9 @@ function run() {
             if (!filePath) {
                 core.setFailed(new Error('Output file path is required'));
             }
-            yield getTerraformOutput();
+            const result = yield getTerraformOutput();
+            yield fs_1.promises.writeFile(path_1.default.resolve(filePath), JSON.stringify(result));
+            core.info('end of run function call');
         }
         catch (e) {
             if (e instanceof Error) {

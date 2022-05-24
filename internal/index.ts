@@ -1,4 +1,6 @@
 import { spawn } from 'child_process';
+import { promises as fs } from 'fs';
+import path from 'path';
 
 import * as core from '@actions/core';
 
@@ -12,26 +14,44 @@ async function getTerraformOutput(): Promise<Record<string, Property>> {
       'terraform',
       [
         'output',
-        '-json'
+        '-json',
       ],
     );
 
-    command.stdout.on('data', data => {
-      core.info(`stdout: ${data}`);
-    });
+    let result: Record<string, Property> = {};
 
-    command.stderr.on('data', data => {
-      core.info(`stderr: ${data}`);
-    });
+    command.stdout.on(
+      'data',
+      (data) => {
+        try {
+          result = JSON.parse(data) as Record<string, Property>;
+          return undefined;
+        } catch (e) {
+          return undefined;
+        }
+      },
+    );
 
-    command.on('error', (error) => {
-      core.info(`error: ${error.message}`);
-    });
+    command.stderr.on(
+      'data',
+      (data) => reject(new Error(data)),
+    );
 
-    command.on('close', code => {
-      core.info(`child process exited with code ${code}`);
-      resolve({});
-    });
+    command.on(
+      'error',
+      (e) => reject(e),
+    );
+
+    command.on(
+      'close',
+      (code) => {
+        if (code === 0) {
+          return resolve(result);
+        }
+
+        return reject(new Error(`child process exited with code ${code}`));
+      },
+    );
   });
 }
 
@@ -43,7 +63,12 @@ async function run(): Promise<void> {
       core.setFailed(new Error('Output file path is required'));
     }
 
-    await getTerraformOutput();
+    const result = await getTerraformOutput();
+    await fs.writeFile(
+      path.resolve(filePath),
+      JSON.stringify(result),
+    );
+    core.info('end of run function call');
   } catch (e) {
     if (e instanceof Error) {
       core.setFailed(e.message);
