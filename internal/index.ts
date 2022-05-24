@@ -50,3 +50,7 @@ async function run(): Promise<void> {
     }
   }
 }
+
+run()
+  .then(() => core.info('call run function'))
+  .catch((e) => core.setFailed(e.message));
