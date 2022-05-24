@@ -81,6 +81,9 @@ function run() {
         }
     });
 }
+run()
+    .then(() => core.info('call run function'))
+    .catch((e) => core.setFailed(e.message));
 
 
 /***/ }),

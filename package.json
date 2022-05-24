@@ -5,7 +5,8 @@
   "main": "dest/index.js",
   "scripts": {
     "build": "rm -rf dest && tsc",
-    "package": "ncc build --source-map --license licenses.txt --out dest"
+    "package": "ncc build --source-map --license licenses.txt --out dest",
+    "all": "npm run build && npm run package"
   },
   "repository": {
     "type": "git",
