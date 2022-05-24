@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  build-det:
+  build-dest:
     runs-on: ubuntu-latest
 
     steps:

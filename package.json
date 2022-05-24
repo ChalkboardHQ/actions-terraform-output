@@ -4,9 +4,8 @@
   "description": "Store terraform output to file",
   "main": "dest/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "build": "rm -rf dest && tsc",
-    "package": "ncc build --source-map --license licenses.txt"
+    "package": "ncc build --source-map --license licenses.txt --out dest"
   },
   "repository": {
     "type": "git",
