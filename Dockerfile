@@ -1,4 +1,4 @@
-FROM node:16 as backBuild
+FROM node:24 as backBuild
 
 # add credentials on build
 ARG SSH_PRIVATE_KEY
@@ -22,7 +22,7 @@ RUN npm prune --production
 
 RUN chown -R root:root /app
 
-FROM node:16
+FROM node:24
 
 RUN mkdir /app && mkdir /app/calkboard-hq
 
