@@ -1,6 +1,6 @@
 {
   "name": "terraform-output",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Store terraform output to file",
   "main": "dest/index.js",
   "scripts": {
