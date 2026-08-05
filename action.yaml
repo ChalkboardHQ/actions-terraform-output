@@ -13,5 +13,5 @@ outputs:
   result:
     description: 'Terraform output'
 runs:
-  using: 'node16'
+  using: 'node24'
   main: 'dest/index.js'
